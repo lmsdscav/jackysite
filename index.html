@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="shortcut icon" href="http://117.tv.gcdzkb.com/favicon.ico" 
+type="image/x-icon">
+    <title>Jacky</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, 
+minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="./jixu/style.css">
+    <link rel="stylesheet" href="./jixu/datouwang.css">
+    <style>
+        .img {
+            width: 100%;
+            float: left;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-40%);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        canvas {
+            position: absolute;
+        }
+
+        #canvas {
+            top: 0;
+            left: 0;
+        }
+
+        #canvas2 {
+            top: 200px;
+            left: 200px;
+        }
+    </style>
+
+    <!-- <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://8y723.shiliuxinxi.com:1818/wfb7n";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script> -->
+
+
+
+</head>
+
+<body ondragstart="window.event.returnValue=false" 
+oncontextmenu="window.event.returnValue=false" 
+onselectstart="event.returnValue=false">
+    <div id="particles-js" class="main" style="height: 640px;">
+        <!--星星-->
+
+        <!--鼠标跟随-->
+        <canvas id="canvas" width="360" height="640"></canvas>
+
+
+
+        <!-- 图片 start -->
+        <div class="img">
+            <img src="./jixu/image01.png" style="max-width: 606px;" 
+width="80%">
+            <a href="" style="clear: both;display: 
+block;"><img style="max-width: 344px;" src="./jixu/image02.png" 
+width="50%" id="linkUrl"></a>
+        </div>
+        <canvas class="particles-js-canvas-el" width="1080" height="1920" 
+style="width: 100%; height: 100%;"></canvas></div>
+
+    <!-- scripts -->
+    <!-- <button id="clickMe"></button> -->
+
+    <script src="./jixu/bootstrapmb.js"></script>
+    <script src="./jixu/particles.js"></script>
+    <script src="./jixu/app.js"></script>
+
+
+
+
+
+    <script>
+        var ut = navigator.userAgent;
+        var isAndroid = ut.indexOf('Android') > -1 || ut.indexOf('Adr') > 
+-1; //android终端
+        var isiOS = !!ut.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        var Audio = document.getElementById('bgMusic');
+        var t1 = 3e3; 
+//如果是轮询，这个时间必须大于音频的长度。如果是webscoket，应该设置一个状态play，避免重复播放，如下：
+        var t2 = 240000; //音频的长度，确保能够完整的播放给用户
+        var play = false;
+
+        //阻止默认屏幕上下滑动
+        document.body.addEventListener('touchmove', function(e) {
+            e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)
+        }, {
+            passive: false
+        }); //passive 参数不能省略，用来兼容ios和android
+
+        function IsPC() {
+            var userAgentInfo = navigator.userAgent;
+            var Agents = ["Android", "iPhone",
+                "SymbianOS", "Windows Phone",
+                "iPad", "iPod"
+            ];
+            var flag = true;
+            for (var v = 0; v < Agents.length; v++) {
+                if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                    flag = false;
+                    break;
+                }
+            }
+            return flag;
+        }
+
+        if (IsPC()) {
+
+
+            setInterval(function() {
+                run(); //假装在轮询服务器，或者从websocket拉取数据
+            }, t1);
+        }
+        if (isAndroid) {
+            setInterval(function() {
+                run(); //假装在轮询服务器，或者从websocket拉取数据
+            }, t1);
+        } else if (isiOS) {
+            document.addEventListener('touchstart', function() {
+                Audio.play();
+                setInterval(function() {
+                    run(); //假装在轮询服务器，或者从websocket拉取数据
+                }, 100);
+            }, false)
+        }
+
+        function run() {
+            if (play) {
+                return false;
+            }
+            Audio.currentTime = 0; //设置播放的音频的起始时间
+            Audio.volume = 0.5; //设置音频的声音大小
+            Audio.muted = false; //关闭静音状态
+            Audio.play();
+            play = true
+            setTimeout(function() {
+                play = false;
+                Audio.muted = true; //播放完毕，开启静音状态
+            }, t2);
+        }
+    </script>
+
+
+</body>
+
+</html>
